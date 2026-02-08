@@ -3,119 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rishuu ♥ Vanshuu</title>
+    <title>For My Love</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
             margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center;
+            justify-content: center; min-height: 100vh;
             background: linear-gradient(135deg, #fce4ec, #e3f2fd);
             font-family: 'Segoe UI', sans-serif; text-align: center;
-            color: #333;
+            color: #333; overflow-x: hidden;
         }
 
-        .header-title {
-            font-family: 'Georgia', serif;
-            font-size: 2.5rem; margin: 30px 0;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-        }
+        .page { display: none; width: 90%; max-width: 500px; animation: fadeIn 0.8s; }
+        .active { display: block; }
 
-        /* MAIN PHOTO STYLE */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        h1 { font-family: 'Georgia', serif; font-size: 2.2rem; margin-bottom: 20px; }
+        
+        /* IMAGE STYLES */
         .main-photo-container {
-            width: 280px; height: 280px;
-            border-radius: 40px; overflow: hidden;
-            border: 8px solid white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 0 20px rgba(255,182,193,0.5);
-            animation: float 4s ease-in-out infinite;
+            width: 250px; height: 250px; border-radius: 40px; overflow: hidden;
+            border: 6px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin: 0 auto 20px;
         }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
         .main-photo-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        .memory-text {
-            padding: 20px; font-size: 1.1rem; line-height: 1.6;
-            max-width: 85%; margin-bottom: 20px;
+        /* BUTTON STYLES */
+        .btn-container { display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        button {
+            padding: 15px 30px; border: none; border-radius: 25px;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 1rem;
+        }
+        .btn-yes { background: #ffc1e3; color: #880e4f; }
+        .btn-no { background: #eee; color: #666; }
+        
+        /* MUSIC BUTTON */
+        .music-btn {
+            background: white; color: #d81b60; padding: 10px 20px;
+            border-radius: 50px; border: 2px solid #ffc1e3;
+            font-weight: bold; margin-top: 30px; cursor: pointer;
         }
 
-        /* GALLERY SECTION */
-        .gallery-title { font-size: 1.5rem; margin: 40px 0 20px; color: #ad1457; }
+        /* GALLERY */
         .gallery-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 15px; width: 90%; max-width: 500px; margin-bottom: 40px;
+            gap: 10px; margin-top: 20px;
         }
         .gallery-item {
-            width: 100%; aspect-ratio: 1/1;
-            border-radius: 20px; overflow: hidden;
-            border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 100%; aspect-ratio: 1/1; border-radius: 15px;
+            overflow: hidden; border: 3px solid white;
         }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* BUTTONS */
-        .button-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 15px; width: 90%; max-width: 400px; margin-bottom: 30px;
-        }
-        button {
-            padding: 15px; border: none; border-radius: 25px;
-            font-weight: bold; cursor: pointer; transition: 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        button:active { transform: scale(0.9); }
-        .btn-yes { background: #ffc1e3; color: #880e4f; }
-        .btn-always { background: #b3e5fc; color: #01579b; }
-        .btn-hug { background: #fff9c4; color: #f57f17; }
-        .btn-forever { background: #c8e6c9; color: #1b5e20; }
-
-        .music-btn {
-            background: white; color: #d81b60; padding: 15px 30px;
-            border-radius: 50px; border: 2px solid #ffc1e3;
-            font-weight: bold; margin-bottom: 40px;
-        }
-
-        .footer { padding: 40px 20px; font-style: italic; font-size: 1.1rem; }
+        .effort-text { font-size: 0.7rem; color: #999; margin-top: 10px; font-style: italic; }
+        .instruction { color: #d81b60; font-weight: bold; margin-top: 15px; display: none; }
     </style>
 </head>
 <body>
 
-    <h1 class="header-title">Rishuu ❤️ Vanshuu</h1>
-
-    <div class="main-photo-container">
-        <img src="memory1.jpg" alt="Our first picture">
+    <div id="page1" class="page active">
+        <h1>Are you ready my love?</h1>
+        <div class="btn-container">
+            <button class="btn-yes" onclick="nextPage(2)">Yes</button>
+            <button class="btn-no" onclick="showOrder()">No</button>
+        </div>
+        <p id="order-msg" class="instruction">THATS MY ORDER! JUST CLICK ON YES! THERE'S NO WAY TO CLICK NO!</p>
+        
+        <button class="music-btn" onclick="toggleMusic()">
+            <span id="music-icon">▶️</span> Play Lover – Taylor Swift
+        </button>
+        <p class="effort-text">(Put a lot of efforts for this faltu thing btw😭)</p>
     </div>
 
-    <div class="memory-text">
-        Remember this was the first picture you had sent me when we had met<br>
-        (I had preserved it in my gallery secretly and you never got to know btw)
+    <div id="page2" class="page">
+        <h1>Rishuu ❤️ Vanshuu</h1>
+        <div class="main-photo-container">
+            <img src="memory1.jpg" alt="First Photo">
+        </div>
+        <p>Remember this was the first picture you had sent me when we had met?</p>
+        <p style="font-size: 0.9rem;">(I had preserved it in my gallery secretly and you never got to know btw)</p>
+        
+        <h2 style="color: #d81b60; margin-top: 30px;">Would you like to move forward?</h2>
+        <div class="btn-container">
+            <button class="btn-yes" onclick="celebrate(); nextPage(3)">Yes</button>
+            <button class="btn-yes" onclick="celebrate(); nextPage(3)">Definitely Yes</button>
+        </div>
     </div>
 
-    <h2 class="gallery-title">Our Memories ✨</h2>
-    <div class="gallery-grid">
-        <div class="gallery-item"><img src="memory2.jpg"></div>
-        <div class="gallery-item"><img src="memory3.jpg"></div>
-        <div class="gallery-item"><img src="memory4.jpg"></div>
-        <div class="gallery-item"><img src="memory5.jpg"></div>
-        <div class="gallery-item"><img src="memory6.jpg"></div>
-        <div class="gallery-item"><img src="memory7.jpg"></div>
-    </div>
-
-    <div class="button-grid">
-        <button class="btn-yes" onclick="celebrate()">💖 Yes</button>
-        <button class="btn-always" onclick="celebrate()">♾️ Always Yes</button>
-        <button class="btn-hug" onclick="celebrate()">🫶 Hug you</button>
-        <button class="btn-forever" onclick="celebrate()">💍 Forever</button>
-    </div>
-
-    <button class="music-btn" onclick="toggleMusic()">
-        <span id="music-icon">▶️</span> Play Lover – Taylor Swift
-    </button>
-
-    <div class="footer">
-        How was it? Did you like it?<br>
-        <strong>Reply in Insta</strong>
+    <div id="page3" class="page">
+        <h1>Our Memories ✨</h1>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="memory2.jpg"></div>
+            <div class="gallery-item"><img src="memory3.jpg"></div>
+            <div class="gallery-item"><img src="memory4.jpg"></div>
+            <div class="gallery-item"><img src="memory5.jpg"></div>
+            <div class="gallery-item"><img src="memory6.jpg"></div>
+            <div class="gallery-item"><img src="memory7.jpg"></div>
+        </div>
+        
+        <div style="margin-top: 40px; font-style: italic;">
+            <h3>How was it? Did you like it?</h3>
+            <p><strong>Reply in Insta</strong></p>
+        </div>
     </div>
 
     <audio id="audio-player" loop>
@@ -123,14 +115,26 @@
     </audio>
 
     <script>
-        function celebrate() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        }
         const audio = document.getElementById('audio-player');
         const icon = document.getElementById('music-icon');
+
+        function showOrder() {
+            document.getElementById('order-msg').style.display = 'block';
+        }
+
+        function nextPage(num) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + num).classList.add('active');
+            if(num === 2 && audio.paused) { toggleMusic(); }
+        }
+
         function toggleMusic() {
             if (audio.paused) { audio.play(); icon.innerText = "⏸️"; }
             else { audio.pause(); icon.innerText = "▶️"; }
+        }
+
+        function celebrate() {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
     </script>
 </body>
